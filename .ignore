@@ -1,7 +1,10 @@
+.tox/
 .venv/
 .git/
 *.pyc
 .ruff_cache/
+.mypy_cache/
+.pytest_cache/
 *egg-info/
-typings/
-.aider*
+dist/
+htmlcov/
