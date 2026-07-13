@@ -1,0 +1,7 @@
+.venv/
+.git/
+*.pyc
+.ruff_cache/
+*egg-info/
+typings/
+.aider*
