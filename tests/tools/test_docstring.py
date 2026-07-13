@@ -16,13 +16,7 @@ def test_description_only():
 
 
 def test_description_with_params():
-    doc = (
-        "Add two numbers.\n"
-        "\n"
-        "Args:\n"
-        "    a: First number.\n"
-        "    b: Second number.\n"
-    )
+    doc = "Add two numbers.\n\nArgs:\n    a: First number.\n    b: Second number.\n"
     result = parse_google_docstring(doc)
     assert result["description"] == "Add two numbers."
     assert result["params"] == {"a": "First number.", "b": "Second number."}

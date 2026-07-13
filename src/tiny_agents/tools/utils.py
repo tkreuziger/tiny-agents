@@ -62,10 +62,7 @@ def execute_tool(
     start_time = time.time()
 
     if tool.requires_approval:
-        if approve:
-            approved = approve(tool, tool_call)
-        else:
-            approved = False
+        approved = approve(tool, tool_call) if approve else False
     else:
         approved = True
 

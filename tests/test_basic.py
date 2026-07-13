@@ -1,6 +1,5 @@
 """Basic tests for tiny_agents package."""
 
-
 from tiny_agents import (
     Message,
     Role,

@@ -1,12 +1,19 @@
 import json
-from pathlib import Path
 
 import pytest
 
 from tiny_agents.messages.deserialize import message_from_json, messages_from_json
-from tiny_agents.messages.make_message import assistant_message, system_message, user_text_message
-from tiny_agents.messages.serialize import message_to_json, messages_to_json, messages_to_jsonl
-from tiny_agents.messages.tools import ToolCall, ToolResult
+from tiny_agents.messages.make_message import (
+    assistant_message,
+    system_message,
+    user_text_message,
+)
+from tiny_agents.messages.serialize import (
+    message_to_json,
+    messages_to_json,
+    messages_to_jsonl,
+)
+from tiny_agents.messages.tools import ToolCall
 
 
 def test_message_to_json_roundtrip():

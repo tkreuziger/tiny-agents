@@ -1,5 +1,6 @@
 import inspect
 import logging
+import types
 from typing import Any, Literal, Union, get_args, get_origin
 
 from .docstring import parse_google_docstring
@@ -10,7 +11,7 @@ logger = logging.getLogger(__name__)
 def is_optional(annotation: Any) -> bool:
     origin = get_origin(annotation)
 
-    if origin is Union:
+    if origin is Union or origin is types.UnionType:
         return type(None) in get_args(annotation)
 
     return False

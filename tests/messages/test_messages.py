@@ -39,7 +39,7 @@ def test_message_frozen():
     msg = Message(role="user", content="hi")
     try:
         msg.content = "bye"  # type: ignore[misc]
-        assert False, "Should be frozen"
+        raise AssertionError("Should be frozen")
     except AttributeError:
         pass
 

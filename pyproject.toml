@@ -83,3 +83,32 @@ exclude_lines = [
     "raise NotImplementedError",
 ]
 
+[tool.tox]
+env_list = ["fmt", "lint", "typecheck", "test"]
+skip_missing_interpreters = true
+
+[tool.tox.env_run_base]
+basepython = "python3.12"
+uv = true
+uv_sync = true
+uv_resolution = "lowest-direct"
+allowlist_externals = ["ruff", "mypy", "pytest"]
+
+[tool.tox.env.fmt]
+description = "Format code with ruff"
+commands = [["ruff", "format", "src/", "tests/"]]
+
+[tool.tox.env.lint]
+description = "Lint code with ruff"
+commands = [["ruff", "check", "src/", "tests/", "--fix"]]
+
+[tool.tox.env.typecheck]
+description = "Type-check with mypy"
+commands = [["mypy", "src/tiny_agents/"]]
+
+[tool.tox.env.test]
+description = "Run tests with coverage"
+commands = [
+    ["pytest", "--cov=tiny_agents", "--cov-report=term-missing", "--cov-report=html", "tests/"],
+]
+

@@ -1,5 +1,3 @@
-from typing import Optional
-
 from tiny_agents.tools.schema import (
     function_to_schema,
     is_optional,
@@ -9,7 +7,7 @@ from tiny_agents.tools.schema import (
 
 
 def test_is_optional_with_optional():
-    assert is_optional(Optional[int]) is True
+    assert is_optional(int | None) is True
 
 
 def test_is_optional_with_plain_type():
@@ -17,7 +15,7 @@ def test_is_optional_with_plain_type():
 
 
 def test_strip_optional():
-    assert strip_optional(Optional[int]) is int
+    assert strip_optional(int | None) is int
 
 
 def test_strip_optional_no_op():
@@ -32,7 +30,7 @@ def test_primitives():
 
 
 def test_optional_strips_and_converts():
-    assert python_type_to_schema(Optional[str]) == {"type": "string"}
+    assert python_type_to_schema(str | None) == {"type": "string"}
 
 
 def test_list_type():
@@ -82,7 +80,7 @@ def test_function_to_schema_with_defaults():
 
 
 def test_function_to_schema_with_optional_param():
-    def notify(message: str, recipient: Optional[str] = None) -> str:
+    def notify(message: str, recipient: str | None = None) -> str:
         """Send a notification.
 
         Args:

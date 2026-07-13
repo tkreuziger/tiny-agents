@@ -1,6 +1,6 @@
 import pytest
 
-from tiny_agents.messages import ToolCall, tool_message
+from tiny_agents.messages import ToolCall
 from tiny_agents.tools.errors import ToolError, ToolFatalError
 from tiny_agents.tools.types import Tool
 from tiny_agents.tools.utils import execute_tool, get_tool_by_name

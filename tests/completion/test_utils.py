@@ -1,12 +1,15 @@
-import json
 
 from tiny_agents.completion.utils import (
     litellm_response_to_message,
     message_to_litellm,
     tools_to_litellm,
 )
-from tiny_agents.messages.make_message import assistant_message, system_message, tool_message, user_text_message
-from tiny_agents.messages.tools import ToolCall, ToolResult
+from tiny_agents.messages.make_message import (
+    assistant_message,
+    system_message,
+    tool_message,
+    user_text_message,
+)
 from tiny_agents.tools.types import Tool
 
 
@@ -62,7 +65,7 @@ def test_message_to_litellm_unknown_role():
     object.__setattr__(msg, "role", "unknown")  # type: ignore[arg-type]
     try:
         message_to_litellm(msg)
-        assert False, "Should have raised ValueError"
+        raise AssertionError("Should have raised ValueError")
     except ValueError as e:
         assert "Unknown message role" in str(e)
 
@@ -113,7 +116,14 @@ def test_litellm_response_to_message_text():
 
 
 def test_litellm_response_to_message_tool_call():
-    fake_tc = type("obj", (), {"id": "tc1", "function": type("fn", (), {"name": "add", "arguments": '{"x":1}'})})()
+    fake_tc = type(
+        "obj",
+        (),
+        {
+            "id": "tc1",
+            "function": type("fn", (), {"name": "add", "arguments": '{"x":1}'}),
+        },
+    )()
     fake_msg = _FakeMessage(tool_calls=[fake_tc])
     resp = _FakeResponse(_FakeChoice(fake_msg))
     msg = litellm_response_to_message(resp, {})
