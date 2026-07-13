@@ -15,9 +15,12 @@ class Tool:
         handler: The callable that implements the tool's behavior. It should
             accept arguments matching the defined schema and return the tool's
             result.
+        requires_approval: Whether execution requires approval via a callback
+            passed to `execute_tool()`.
     """
 
     name: str
     description: str
     schema: dict[str, Any]
     handler: Callable[..., Any]
+    requires_approval: bool = False

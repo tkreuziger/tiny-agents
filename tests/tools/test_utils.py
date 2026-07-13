@@ -42,12 +42,19 @@ def test_execute_tool_success():
 
 def test_execute_tool_denied_by_approval():
     tool = _make_tool("echo")
+    tool_with_approval = Tool(
+        name=tool.name,
+        description=tool.description,
+        schema=tool.schema,
+        handler=tool.handler,
+        requires_approval=True,
+    )
     call = ToolCall(id="c2", name="echo", args={"text": "hi"})
 
     def deny(_tool: Tool, _call: ToolCall) -> bool:
         return False
 
-    result = execute_tool(tool, call, approve=deny)
+    result = execute_tool(tool_with_approval, call, approve=deny)
     assert result.role == "tool"
     assert "error" in result.tool_result.data
 

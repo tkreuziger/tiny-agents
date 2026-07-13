@@ -7,13 +7,17 @@ from .types import Tool
 F = TypeVar("F", bound=Callable[..., object])
 
 
-def make_tool() -> Callable[[F], Tool]:
+def make_tool(*, requires_approval: bool = False) -> Callable[[F], Tool]:
     """Create a decorator that turns a function into a `Tool`.
 
     This factory returns a decorator which, when applied to a function,
     will inspect the function's signature and docstring via `function_to_schema`,
     construct a JSON-schema-like `parameters` specification, and return a
     `Tool` instance with the function's name, description, schema, and handler.
+
+    Args:
+        requires_approval: If True, tool execution requires approval via the
+            callback passed to `execute_tool()`.
 
     Returns:
         A decorator that converts a function into a `Tool` instance.
@@ -28,6 +32,7 @@ def make_tool() -> Callable[[F], Tool]:
             description=schema["description"] or "",
             schema=schema["parameters"],
             handler=fn,
+            requires_approval=requires_approval,
         )
 
     return wrap
