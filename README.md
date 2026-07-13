@@ -57,7 +57,7 @@ reply = complete(
 )
 ```
 
-**Building a tool-using agent loop:** see [examples/test_04_agent1.py](examples/test_04_agent1.py).
+**Building a tool-using agent loop:** see [examples/test_04_agent.py](examples/test_04_agent.py).
 
 ## Documentation
 
