@@ -1,55 +1,43 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
 [project]
 name = "tiny-agents"
 version = "1.0.0"
 description = "A minimal, ergonomic Python library for interacting with LLMs"
 readme = "README.md"
-license = {text = "MIT"}
+license = { text = "MIT" }
 requires-python = ">=3.12"
 dependencies = [
-    "litellm>=1.81.8",
-    "pillow>=12.1.0",
-    "pydantic>=2.12.5",
+  "litellm>=1.81.8",
+  "pillow>=12.1.0",
+  "pydantic>=2.12.5",
 ]
 
 [dependency-groups]
 dev = [
-    "debugpy>=1.8.20",
-    "mypy>=1.17.0",
-    "pdoc>=16.0.0",
-    "pytest>=8.4.1",
-    "pytest-cov>=6.2.1",
-    "ruff>=0.15.0",
-    "tox>=4.28.1",
-    "twine>=6.2.0",
+  "debugpy>=1.8.20",
+  "mypy>=1.17.0",
+  "pdoc>=16.0.0",
+  "pytest>=8.4.1",
+  "pytest-cov>=6.2.1",
+  "ruff>=0.15.0",
+  "tox>=4.28.1",
+  "twine>=6.2.0",
 ]
 
-[tool.uv]
-package = true
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.ruff]
-target-version = "py312"
-line-length = 88
+[tool.coverage.run]
+source = ["tiny_agents"]
+omit = ["tests/*"]
 
-[tool.ruff.format]
-quote-style = "double"
-
-[tool.ruff.lint]
-select = [
-    "E",    # pycodestyle errors
-    "W",    # pycodestyle warnings
-    "F",    # pyflakes
-    "I",    # isort
-    "B",    # flake8-bugbear
-    "C4",   # flake8-comprehensions
-    "UP",   # pyupgrade
-    "SIM",  # flake8-simplify
-]
-ignore = [
-    "E501",  # line too long (handled by formatter)
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+  "pragma: no cover",
+  "def __repr__",
+  "if TYPE_CHECKING:",
+  "raise NotImplementedError",
 ]
 
 [tool.mypy]
@@ -66,22 +54,31 @@ warn_unused_ignores = true
 warn_no_return = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
 python_classes = ["Test*"]
+python_files = ["test_*.py"]
 python_functions = ["test_*"]
+testpaths = ["tests"]
 
-[tool.coverage.run]
-source = ["tiny_agents"]
-omit = ["tests/*"]
+[tool.ruff]
+target-version = "py312"
+line-length = 88
 
-[tool.coverage.report]
-show_missing = true
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "if TYPE_CHECKING:",
-    "raise NotImplementedError",
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.ruff.lint]
+select = [
+  "E",  # pycodestyle errors
+  "W",  # pycodestyle warnings
+  "F",  # pyflakes
+  "I",  # isort
+  "B",  # flake8-bugbear
+  "C4",  # flake8-comprehensions
+  "UP",  # pyupgrade
+  "SIM",  # flake8-simplify
+]
+ignore = [
+  "E501",  # line too long (handled by formatter)
 ]
 
 [tool.tox]
@@ -110,6 +107,14 @@ commands = [["mypy", "src/tiny_agents/"]]
 [tool.tox.env.test]
 description = "Run tests with coverage"
 commands = [
-    ["pytest", "--cov=tiny_agents", "--cov-report=term-missing", "--cov-report=html", "tests/"],
+  [
+    "pytest",
+    "--cov=tiny_agents",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "tests/"
+  ],
 ]
 
+[tool.uv]
+package = true
