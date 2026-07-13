@@ -17,7 +17,7 @@ A comprehensive guide to using the `tiny-agents` library with all options, defau
 - [Completion](#completion)
   - [complete](#completemodel-messages---message)
 - [Tools](#tools)
-  - [make_tool](#make_toolrequires_human_approval-bool--false---tool)
+  - [make_tool](#make_tool-requires_approval-bool--false---tool)
   - [Tool](#tool-dataclass)
   - [execute_tool](#execute_tooltool-tool_call-toolcall---message)
   - [get_tool_by_name](#get_tool_by_nametools-name---tool--none)
@@ -277,13 +277,13 @@ reply = complete(
 
 ## Tools
 
-### make_tool(requires_human_approval: bool = False) -> Tool
+### make_tool(*, requires_approval: bool = False) -> Tool
 
 Decorator factory that converts a Python function into a `Tool`. The JSON schema is auto-generated from the function's type annotations and Google-style docstring.
 
-| Parameter                | Type   | Default | Description                                          |
-|--------------------------|--------|---------|------------------------------------------------------|
-| `requires_human_approval`| `bool` | `False` | If `True`, prompts for yes/no approval before executing. |
+| Parameter           | Type   | Default | Description                                                |
+|---------------------|--------|---------|------------------------------------------------------------|
+| `requires_approval` | `bool` | `False` | If `True`, `execute_tool()` requires an `approve` callback to proceed. |
 
 ```python
 from tiny_agents import make_tool
@@ -291,13 +291,11 @@ from tiny_agents import make_tool
 @make_tool()
 def get_weather(location: str) -> str:
     """Get the current weather at a location."""
-    # Implementation...
     return "Sunny, 22°C"
 
-@make_tool(requires_human_approval=True)
+@make_tool(requires_approval=True)
 def send_email(to: str, subject: str, body: str) -> str:
     """Send an email to a recipient."""
-    # Will prompt user for approval before executing
     return "Sent"
 ```
 
@@ -346,43 +344,66 @@ class Tool:
     description: str
     schema: dict[str, Any]
     handler: Callable[..., Any]
+    requires_approval: bool = False
 ```
 
-| Field       | Type                    | Description                                     |
-|-------------|-------------------------|-------------------------------------------------|
-| `name`      | `str`                   | Unique identifier (auto-set to function `__name__`). |
-| `description`| `str`                  | Human-readable summary (auto-extracted from docstring). |
-| `schema`    | `dict[str, Any]`        | JSON Schema for input parameters.               |
-| `handler`   | `Callable[..., Any]`    | The original Python function.                   |
+| Field                | Type                    | Description                                     |
+|----------------------|-------------------------|-------------------------------------------------|
+| `name`               | `str`                   | Unique identifier (auto-set to function `__name__`). |
+| `description`        | `str`                   | Human-readable summary (auto-extracted from docstring). |
+| `schema`             | `dict[str, Any]`        | JSON Schema for input parameters.               |
+| `handler`            | `Callable[..., Any]`    | The original Python function.                   |
+| `requires_approval`  | `bool`                  | Whether execution requires approval (default `False`). |
 
 ```python
 # Access tool metadata
-print(get_weather.name)         # "get_weather"
-print(get_weather.description)  # "Get the current weather at a location."
-print(get_weather.schema)       # {"type": "object", "properties": {"location": {"type": "string"}}, ...}
+print(get_weather.name)                  # "get_weather"
+print(get_weather.description)           # "Get the current weather at a location."
+print(get_weather.requires_approval)     # False
 
 # Call the handler directly
 result = get_weather.handler(location="Paris")
 ```
 
-### execute_tool(tool: Tool, tool_call: ToolCall) -> Message
+### execute_tool(tool, tool_call, *, approve=None) -> Message
 
-Execute a tool and return a `tool_message` with the result. Handles timing, error wrapping, and human approval.
+Execute a tool and return a `tool_message` with the result. Handles timing, error wrapping, and approval gating.
 
-| Parameter   | Type       | Description                           |
-|-------------|------------|---------------------------------------|
-| `tool`      | `Tool`     | The tool to execute.                  |
-| `tool_call` | `ToolCall` | The tool call from the model.         |
+When a tool has `requires_approval=True`, the `approve` callback **must** be provided — otherwise execution is denied. If `requires_approval=False` (the default), execution proceeds without prompting.
+
+| Parameter | Type                                         | Default | Description                                  |
+|-----------|----------------------------------------------|---------|----------------------------------------------|
+| `tool`    | `Tool`                                       | *required* | The tool to execute.                     |
+| `tool_call`| `ToolCall`                                  | *required* | The tool call from the model.            |
+| `approve` | `Callable[[Tool, ToolCall], bool] \| None`   | `None`  | Callback that gates execution. Returns `True` to proceed, `False` to deny. |
 
 ```python
-from tiny_agents import execute_tool, get_tool_by_name, tool_message, append_messages
+from tiny_agents import execute_tool, get_tool_by_name, append_messages
 
 tool = get_tool_by_name(tools, call.name)
 if tool:
     result_msg = execute_tool(tool, call)
-    # result_msg is a Message with role="tool" containing the result
     append_messages(chat, reply, result_msg)
     reply = complete(model=model, messages=chat)
+```
+
+**With approval gating:**
+
+```python
+import json
+from tiny_agents import make_tool, execute_tool
+
+@make_tool(requires_approval=True)
+def send_email(to: str, subject: str, body: str) -> str:
+    """Send an email to a recipient."""
+    return "Sent"
+
+def approve(tool, call) -> bool:
+    args = json.dumps(call.args)
+    response = input(f"Approve {tool.name}({args})? [y/n] ")
+    return response.strip().lower() in ("y", "yes")
+
+result_msg = execute_tool(send_email, call, approve=approve)
 ```
 
 **Error handling within tools:**

@@ -8,7 +8,7 @@ A minimal, ergonomic Python library for interacting with LLMs. Built on top of [
 - **Tool calling** — define tools as Python functions, schemas are auto-generated from type hints and docstrings
 - **Structured output** — parse LLM responses into Pydantic models
 - **Image support** — send images in messages with automatic base64 encoding
-- **Human approval** — gate tool execution behind interactive approval prompts
+- **Approval gating** — mark tools as requiring approval before execution
 - **Message serialization** — export conversations as JSON or JSONL
 - **Zero config** — works out of the box with environment variables for API keys
 
