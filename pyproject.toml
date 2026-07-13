@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tiny-agents"
-version = "0.1.0"
+version = "1.0.0"
 description = "A minimal, ergonomic Python library for interacting with LLMs"
 readme = "README.md"
 license = {text = "MIT"}
@@ -24,6 +24,7 @@ dev = [
     "pytest-cov>=6.2.1",
     "ruff>=0.15.0",
     "tox>=4.28.1",
+    "twine>=6.2.0",
 ]
 
 [tool.uv]
