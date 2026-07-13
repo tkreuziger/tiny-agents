@@ -1,10 +1,10 @@
-from tiny_agents.messages.make_message import (
+from llmini.messages.make_message import (
     assistant_message,
     system_message,
     tool_message,
     user_text_message,
 )
-from tiny_agents.messages.tools import ToolCall
+from llmini.messages.tools import ToolCall
 
 
 def test_user_text_message():

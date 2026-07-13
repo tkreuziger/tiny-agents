@@ -1,6 +1,6 @@
-"""Basic tests for tiny_agents package."""
+"""Basic tests for llmini package."""
 
-from tiny_agents import (
+from llmini import (
     Message,
     Role,
     Tool,

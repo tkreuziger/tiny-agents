@@ -1,5 +1,5 @@
-from tiny_agents.messages.messages import Message
-from tiny_agents.messages.tools import ToolCall, ToolResult
+from llmini.messages.messages import Message
+from llmini.messages.tools import ToolCall, ToolResult
 
 
 def test_message_basic():

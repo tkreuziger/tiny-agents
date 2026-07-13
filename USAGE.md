@@ -1,6 +1,6 @@
-# tiny-agents Usage Guide
+# llmini Usage Guide
 
-A comprehensive guide to using the `tiny-agents` library with all options, defaults, and examples.
+A comprehensive guide to using the `llmini` library with all options, defaults, and examples.
 
 ## Table of Contents
 
@@ -38,10 +38,10 @@ A comprehensive guide to using the `tiny-agents` library with all options, defau
 
 ```bash
 # Using uv
-uv add tiny-agents
+uv add llmini
 
 # Using pip
-pip install tiny-agents
+pip install llmini
 ```
 
 **Requirements:** Python >= 3.12
@@ -67,7 +67,7 @@ ModelConfig(model: str, temperature: float = 0.7)
 | `temperature` | `float`| `0.7`  | Sampling temperature. Higher values produce more random output, lower values are more deterministic. |
 
 ```python
-from tiny_agents import ModelConfig
+from llmini import ModelConfig
 
 # Minimal — uses default temperature (0.7)
 model = ModelConfig(model="anthropic/claude-3-5-haiku-latest")
@@ -91,7 +91,7 @@ TransportConfig(api_key: str | None = None, base_url: str | None = None)
 | `base_url`  | `str \| None`  | `None`  | Custom base URL for the API endpoint. `None` uses the provider's default URL. |
 
 ```python
-from tiny_agents import TransportConfig
+from llmini import TransportConfig
 
 # Use default (env vars)
 transport = TransportConfig()
@@ -119,7 +119,7 @@ Creates a system-role message. Used to set the assistant's behavior and personal
 | `text`    | `str`  | The system prompt content.   |
 
 ```python
-from tiny_agents import system_message
+from llmini import system_message
 
 msg = system_message("You are a helpful coding assistant.")
 ```
@@ -133,7 +133,7 @@ Alias for `user_text_message`. Creates a user-role text message.
 | `text`    | `str`  | The user's message content. |
 
 ```python
-from tiny_agents import user_message
+from llmini import user_message
 
 msg = user_message("What is the capital of France?")
 ```
@@ -148,7 +148,7 @@ Creates a user message containing an image. The image is base64-encoded and EXIF
 | `image_path` | `str`  | File path to the image on disk.      |
 
 ```python
-from tiny_agents import user_image_message
+from llmini import user_image_message
 
 msg = user_image_message("What's in this image?", "/path/to/photo.jpg")
 ```
@@ -164,7 +164,7 @@ Creates an assistant-role message. Typically you don't construct these manually 
 | `**metadata_kwargs`  | `str`                     | —       | Additional string key-value metadata.      |
 
 ```python
-from tiny_agents import assistant_message
+from llmini import assistant_message
 
 # Text-only response
 msg = assistant_message(text="The capital is Paris.")
@@ -183,7 +183,7 @@ Creates a tool-result message. Used to send tool execution results back to the m
 | `data`         | `dict[str, Any]`| Structured result data from the tool.      |
 
 ```python
-from tiny_agents import tool_message
+from llmini import tool_message
 
 msg = tool_message(tool_call_id="call_abc123", data={"temperature": 22, "condition": "sunny"})
 ```
@@ -205,7 +205,7 @@ Send a conversation to the LLM and get a single assistant response.
 | `additional_kwargs`  | `dict[str, Any] \| None`   | `None`  | Extra kwargs passed to LiteLLM (e.g. `response_format`). |
 
 ```python
-from tiny_agents import ModelConfig, complete, system_message, user_message
+from llmini import ModelConfig, complete, system_message, user_message
 
 model = ModelConfig(model="anthropic/claude-3-5-haiku-latest")
 
@@ -225,7 +225,7 @@ print(reply.is_tool_call()) # False (text response)
 **With tools:**
 
 ```python
-from tiny_agents import ModelConfig, complete, system_message, user_message, make_tool
+from llmini import ModelConfig, complete, system_message, user_message, make_tool
 
 @make_tool()
 def get_weather(location: str) -> str:
@@ -251,7 +251,7 @@ if reply.is_tool_call():
 **With custom transport:**
 
 ```python
-from tiny_agents import ModelConfig, TransportConfig, complete, user_message
+from llmini import ModelConfig, TransportConfig, complete, user_message
 
 model = ModelConfig(model="openai/gpt-4o")
 transport = TransportConfig(api_key="sk-...")
@@ -286,7 +286,7 @@ Decorator factory that converts a Python function into a `Tool`. The JSON schema
 | `requires_approval` | `bool` | `False` | If `True`, `execute_tool()` requires an `approve` callback to proceed. |
 
 ```python
-from tiny_agents import make_tool
+from llmini import make_tool
 
 @make_tool()
 def get_weather(location: str) -> str:
@@ -378,7 +378,7 @@ When a tool has `requires_approval=True`, the `approve` callback **must** be pro
 | `approve` | `Callable[[Tool, ToolCall], bool] \| None`   | `None`  | Callback that gates execution. Returns `True` to proceed, `False` to deny. |
 
 ```python
-from tiny_agents import execute_tool, get_tool_by_name, append_messages
+from llmini import execute_tool, get_tool_by_name, append_messages
 
 tool = get_tool_by_name(tools, call.name)
 if tool:
@@ -391,7 +391,7 @@ if tool:
 
 ```python
 import json
-from tiny_agents import make_tool, execute_tool
+from llmini import make_tool, execute_tool
 
 @make_tool(requires_approval=True)
 def send_email(to: str, subject: str, body: str) -> str:
@@ -409,7 +409,7 @@ result_msg = execute_tool(send_email, call, approve=approve)
 **Error handling within tools:**
 
 ```python
-from tiny_agents import make_tool, ToolError, ToolFatalError
+from llmini import make_tool, ToolError, ToolFatalError
 
 @make_tool()
 def divide(a: float, b: float) -> str:
@@ -447,7 +447,7 @@ if tool:
 ### Error Types
 
 ```python
-from tiny_agents import ToolError, ToolFatalError
+from llmini import ToolError, ToolFatalError
 ```
 
 | Exception        | Behavior                                    |
@@ -474,7 +474,7 @@ Returns an instance of `T`, or `None` if both strategies fail.
 
 ```python
 from pydantic import BaseModel
-from tiny_agents import ModelConfig, complete_with_schema
+from llmini import ModelConfig, complete_with_schema
 
 class Forecast(BaseModel):
     location: str
@@ -537,7 +537,7 @@ Serialize a single `Message` to a JSON string.
 | `indent`  | `int \| None`   | `2`     | JSON indentation level. `None` for compact output. |
 
 ```python
-from tiny_agents import message_to_json, system_message
+from llmini import message_to_json, system_message
 
 msg = system_message("You are helpful.")
 print(message_to_json(msg))
@@ -566,7 +566,7 @@ Serialize a list of messages to a JSON array string.
 | `indent`  | `int \| None`     | `2`     | JSON indentation level.        |
 
 ```python
-from tiny_agents import messages_to_json, system_message, user_message
+from llmini import messages_to_json, system_message, user_message
 
 chat = [
     system_message("You are helpful."),
@@ -584,7 +584,7 @@ Serialize messages to JSONL format (one JSON object per line).
 | `messages`| `list[Message]`   | The messages to serialize.   |
 
 ```python
-from tiny_agents import messages_to_jsonl
+from llmini import messages_to_jsonl
 
 jsonl = messages_to_jsonl(chat)
 print(jsonl)
@@ -602,7 +602,7 @@ Deserialize the last `limit` lines from a JSONL file.
 
 ```python
 from pathlib import Path
-from tiny_agents import messages_from_jsonl
+from llmini import messages_from_jsonl
 
 messages = messages_from_jsonl(Path("conversation.jsonl"), limit=50)
 if messages:
@@ -624,7 +624,7 @@ Extend a message list in-place with one or more messages. Returns the same list.
 | `*msgs`   | `Message`         | One or more messages to append.      |
 
 ```python
-from tiny_agents import append_messages, user_message, system_message
+from llmini import append_messages, user_message, system_message
 
 chat = [system_message("You are helpful.")]
 append_messages(chat, user_message("Hello!"))
@@ -637,7 +637,7 @@ print(len(chat))  # 4
 ## Complete Example: Multi-Turn Conversation
 
 ```python
-from tiny_agents import (
+from llmini import (
     ModelConfig,
     complete,
     system_message,
@@ -669,7 +669,7 @@ print(reply.content)  # "Approximately 2.1 million people..."
 ## Complete Example: Manual Tool Execution
 
 ```python
-from tiny_agents import (
+from llmini import (
     ModelConfig,
     complete,
     system_message,
@@ -727,7 +727,7 @@ print(reply.content)
 ```python
 from pydantic import BaseModel
 from typing import Literal
-from tiny_agents import ModelConfig, complete_with_schema
+from llmini import ModelConfig, complete_with_schema
 
 class MovieReview(BaseModel):
     title: str

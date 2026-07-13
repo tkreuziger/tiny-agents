@@ -1,4 +1,4 @@
-from tiny_agents.tools.schema import (
+from llmini.tools.schema import (
     function_to_schema,
     is_optional,
     python_type_to_schema,

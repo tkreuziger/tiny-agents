@@ -1,5 +1,5 @@
 [project]
-name = "tiny-agents"
+name = "llmini"
 version = "1.0.0"
 description = "A minimal, ergonomic Python library for interacting with LLMs"
 readme = "README.md"
@@ -28,7 +28,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.coverage.run]
-source = ["tiny_agents"]
+source = ["llmini"]
 omit = ["tests/*"]
 
 [tool.coverage.report]
@@ -102,14 +102,14 @@ commands = [["ruff", "check", "src/", "tests/", "--fix"]]
 
 [tool.tox.env.typecheck]
 description = "Type-check with mypy"
-commands = [["mypy", "src/tiny_agents/"]]
+commands = [["mypy", "src/llmini/"]]
 
 [tool.tox.env.test]
 description = "Run tests with coverage"
 commands = [
   [
     "pytest",
-    "--cov=tiny_agents",
+    "--cov=llmini",
     "--cov-report=term-missing",
     "--cov-report=html",
     "tests/"

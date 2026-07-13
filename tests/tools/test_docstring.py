@@ -1,4 +1,4 @@
-from tiny_agents.tools.docstring import parse_google_docstring
+from llmini.tools.docstring import parse_google_docstring
 
 
 def test_empty_docstring():

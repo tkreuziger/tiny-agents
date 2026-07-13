@@ -1,4 +1,4 @@
-from tiny_agents import (
+from llmini import (
     Message,
     ModelConfig,
     Tool,

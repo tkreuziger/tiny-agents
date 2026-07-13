@@ -1,9 +1,9 @@
 import pytest
 
-from tiny_agents.messages import ToolCall
-from tiny_agents.tools.errors import ToolError, ToolFatalError
-from tiny_agents.tools.types import Tool
-from tiny_agents.tools.utils import execute_tool, get_tool_by_name
+from llmini.messages import ToolCall
+from llmini.tools.errors import ToolError, ToolFatalError
+from llmini.tools.types import Tool
+from llmini.tools.utils import execute_tool, get_tool_by_name
 
 
 def _make_tool(name: str = "echo") -> Tool:

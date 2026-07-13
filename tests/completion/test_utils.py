@@ -1,16 +1,16 @@
 
-from tiny_agents.completion.utils import (
+from llmini.completion.utils import (
     litellm_response_to_message,
     message_to_litellm,
     tools_to_litellm,
 )
-from tiny_agents.messages.make_message import (
+from llmini.messages.make_message import (
     assistant_message,
     system_message,
     tool_message,
     user_text_message,
 )
-from tiny_agents.tools.types import Tool
+from llmini.tools.types import Tool
 
 
 def test_message_to_litellm_user():
@@ -43,7 +43,7 @@ def test_message_to_litellm_tool():
 
 
 def test_message_to_litellm_image():
-    from tiny_agents.messages.messages import Message
+    from llmini.messages.messages import Message
 
     msg = Message(
         role="user",
@@ -58,7 +58,7 @@ def test_message_to_litellm_image():
 
 
 def test_message_to_litellm_unknown_role():
-    from tiny_agents.messages.messages import Message
+    from llmini.messages.messages import Message
 
     msg = Message(role="user", content="hi")  # type: ignore[arg-type]
     # Patch role to an invalid value after construction

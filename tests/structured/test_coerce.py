@@ -1,7 +1,7 @@
 import pytest
 from pydantic import BaseModel
 
-from tiny_agents.structured.coerce import coerce_to_model
+from llmini.structured.coerce import coerce_to_model
 
 
 class Person(BaseModel):

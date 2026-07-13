@@ -1,4 +1,4 @@
-from tiny_agents import ModelConfig, Message, complete, system_message, user_message, tool_message, append_messages, make_tool
+from llmini import ModelConfig, Message, complete, system_message, user_message, tool_message, append_messages, make_tool
 
 model = ModelConfig(model="anthropic/claude-3-5-haiku-latest")
 

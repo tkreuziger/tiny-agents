@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from tiny_agents.structured.schema import (
+from llmini.structured.schema import (
     generate_response_schema,
     generate_string_schema,
     pydantic_to_json_schema,

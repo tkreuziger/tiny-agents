@@ -1,4 +1,4 @@
-# tiny-agents
+# llmini
 
 A minimal, ergonomic Python library for interacting with LLMs. Built on top of [LiteLLM](https://github.com/BerriAI/litellm).
 
@@ -15,16 +15,16 @@ A minimal, ergonomic Python library for interacting with LLMs. Built on top of [
 ## Installation
 
 ```bash
-uv add tiny-agents
+uv add llmini
 
 # or
-pip install tiny-agents
+pip install llmini
 ```
 
 ## Quick Start
 
 ```python
-from tiny_agents import ModelConfig, complete, system_message, user_message
+from llmini import ModelConfig, complete, system_message, user_message
 
 reply = complete(
     model=ModelConfig(model="anthropic/claude-3-5-haiku-latest"),
@@ -40,7 +40,7 @@ print(reply.content)  # "The capital of France is Paris."
 **With tools:**
 
 ```python
-from tiny_agents import ModelConfig, complete, system_message, user_message, make_tool
+from llmini import ModelConfig, complete, system_message, user_message, make_tool
 
 @make_tool()
 def get_weather(location: str) -> str:
